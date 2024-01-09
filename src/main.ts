@@ -9,10 +9,8 @@ async function bootstrap() {
 	const app: INestApplication = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
 		new FastifyAdapter({ logger: false }),
-		{
-			cors: true,
-		},
 	);
+	app.enableCors();
 	app.setGlobalPrefix('api').enableVersioning({ type: VersioningType?.URI, defaultVersion: '1' });
 	await app.listen(CONSTANTS?.port, 'localhost', () => {
 		_logger.log(`Application Listening in port ${CONSTANTS?.port}`);
