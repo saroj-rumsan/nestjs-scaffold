@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common';
-import { ExceptionResponse } from './interface';
+import { ExceptionResponse } from '../interface';
 import { RSException } from './rs.exception';
 
 export class ExceptionHandler {

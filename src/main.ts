@@ -7,6 +7,9 @@ import {
 import { INestApplication, Logger, VersioningType } from '@nestjs/common';
 import CONSTANTS from 'src/utils/constants';
 import { CustomExceptionFilter } from './utils/exceptions/customException.filter';
+import { ValidationPipe } from './utils/pipes/validation.pipe';
+import { ExcludeNullInterceptor } from './utils/interceptors/excludeNull.interceptor';
+import { TransformInterceptor } from './utils/interceptors/transform.interceptor';
 
 async function bootstrap() {
 	const _logger = new Logger(NestApplication?.name);
@@ -16,6 +19,11 @@ async function bootstrap() {
 			new FastifyAdapter({ logger: false }),
 		);
 	app.enableCors();
+	app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalInterceptors(
+		new TransformInterceptor(),
+		new ExcludeNullInterceptor(),
+	);
 	app.useGlobalFilters(new CustomExceptionFilter());
 	app
 		.setGlobalPrefix('api')
