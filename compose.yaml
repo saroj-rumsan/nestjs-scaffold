@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+
+  postgres-db:
+    container_name: postgres
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: nest_scaffold
+    networks:
+      - postgres-network
+    volumes:
+      - nest_scaffold:/var/lib/postgresql/data 
+  nest_scaffold:
+    image: nest_scaffold
+    container_name: nest_scaffold
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/usr/src/app
+      - ./.env:/usr/src/app/.env
+    ports:
+      - 3300:3300
+    networks:
+      - postgres-network
+    depends_on:
+      - postgres-db
+networks:
+  postgres-network:
+    name: postgres-network
+volumes:
+  nest_scaffold:
+    name: nest_scaffold
