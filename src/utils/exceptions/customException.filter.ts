@@ -13,6 +13,7 @@ import { ExceptionHandler } from './exception.handler';
 import { RSException } from './rs.exception';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import { Prisma } from '@prisma/client';
 
 @Catch()
 export class CustomExceptionFilter
@@ -76,6 +77,8 @@ export class CustomExceptionFilter
 			ExceptionHandler?.handleHttpException(exception, responseData, response);
 		} else if (exception instanceof RSException) {
 			ExceptionHandler?.handleRSException(exception, responseData, response);
+		} else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+			ExceptionHandler?.handlePrismaException(exception, responseData);
 		} else if (exception instanceof Error) {
 			ExceptionHandler?.handleGenericError(exception, responseData);
 		} else if (typeof exception === 'string') {
