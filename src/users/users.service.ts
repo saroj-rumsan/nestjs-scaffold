@@ -2,13 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
 	constructor(private prisma: PrismaService) {}
 
 	_logger = new Logger(UsersService?.name);
-
 	create(createUserDto: CreateUserDto) {
 		this?._logger.log(`Creating new user: ${createUserDto?.email}`);
 		return this.prisma.user.create({
@@ -32,5 +32,9 @@ export class UsersService {
 		return this.prisma.user.delete({
 			where: { id },
 		});
+	}
+
+	async filterByRole(role: Role) {
+		return role;
 	}
 }
