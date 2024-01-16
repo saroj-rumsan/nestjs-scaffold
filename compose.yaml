@@ -15,21 +15,21 @@ services:
       - postgres-network
     volumes:
       - nest_scaffold:/var/lib/postgresql/data 
-  nest_scaffold:
-    image: nest_scaffold
-    container_name: nest_scaffold
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    volumes:
-      - ./:/usr/src/app
-      - ./.env:/usr/src/app/.env
-    ports:
-      - 3300:3300
-    networks:
-      - postgres-network
-    depends_on:
-      - postgres-db
+  # nest_scaffold:
+  #   image: nest_scaffold
+  #   container_name: nest_scaffold
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   volumes:
+  #     - ./:/usr/src/app
+  #     - ./.env:/usr/src/app/.env
+  #   ports:
+  #     - 3300:3300
+  #   networks:
+  #     - postgres-network
+  #   depends_on:
+  #     - postgres-db
 networks:
   postgres-network:
     name: postgres-network

@@ -24,5 +24,6 @@ Table users {
 
 Enum Role {
   ADMIN
+  MODERATOR
   USER
 }
