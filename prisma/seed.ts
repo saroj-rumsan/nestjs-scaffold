@@ -9,12 +9,23 @@ enum Roles {
 }
 
 export const users = [
-	{ name: 'Luffy', roles: [Roles?.Admin], email: 'luffy@mailinatorcom' },
-	{ name: 'Zoro', roles: [Roles?.User], email: 'zoro@mailinator.com' },
+	{
+		name: 'Luffy',
+		roles: [Roles?.Admin],
+		email: 'luffy@mailinator.com',
+		password: 'abc123abc',
+	},
+	{
+		name: 'Zoro',
+		roles: [Roles?.User],
+		email: 'zoro@mailinator.com',
+		password: 'abc234abc',
+	},
 	{
 		name: 'Sanji',
 		roles: [Roles?.Moderator, Roles?.User],
 		email: 'sanji@mailinator.com',
+		password: 'abc345abc',
 	},
 ];
 

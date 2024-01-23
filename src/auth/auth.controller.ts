@@ -10,6 +10,8 @@ import {
 	ParseFloatPipe,
 	Post,
 	Query,
+	Request,
+	UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Find, User } from './types';
@@ -19,10 +21,29 @@ import { ValidationPipe } from 'src/utils/pipes/validation.pipe';
 import { TransformationPipe } from 'src/utils/pipes/transformation.pipe';
 import { FindUserById } from './pipes/auth.pipe';
 import { Auth } from './decorators/auth.decorator';
-
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { SiweGuard } from './guards/siwe.guard';
 @Controller('auth')
 export class AuthController {
 	constructor(private authsService: AuthService) {}
+
+	@Post('validate')
+	@UseGuards(LocalAuthGuard)
+	async validateUser(@Request() req) {
+		return req.user;
+	}
+
+	@Post('login')
+	@UseGuards(LocalAuthGuard)
+	async login(@Request() req: any) {
+		return this.authsService.login(req.user);
+	}
+
+	@Post('login/wallet')
+	@UseGuards(SiweGuard)
+	async walletLogin(@Request() req: any) {
+		console.log(req.user);
+	}
 
 	@Post()
 	@Auth(['admin'])

@@ -2,6 +2,7 @@ export interface User {
 	id: string;
 	name: string;
 	email: string;
+	password: string;
 	walletAddress: Buffer | string;
 	profileImage: string;
 	roles: string[];
