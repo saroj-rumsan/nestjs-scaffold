@@ -1,15 +1,9 @@
-import {
-	Injectable,
-	Logger,
-	NotFoundException,
-	UsePipes,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from '@prisma/client';
 import { User } from './interfaces/user.interface';
-import { ParseHexStringPipe } from 'src/utils/pipes/parseHexString.pipe';
 
 @Injectable()
 export class UsersService {
