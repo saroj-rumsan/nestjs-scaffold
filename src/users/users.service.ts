@@ -1,19 +1,23 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Role } from '@prisma/client';
+import { User } from './interfaces/user.interface';
 
 @Injectable()
 export class UsersService {
 	constructor(private prisma: PrismaService) {}
 
 	_logger = new Logger(UsersService?.name);
-	create(createUserDto: CreateUserDto) {
+
+	async create(createUserDto: CreateUserDto) {
 		this?._logger.log(`Creating new user: ${createUserDto?.email}`);
-		return this.prisma.user.create({
+		const user = await this.prisma.user.create({
 			data: createUserDto,
 		});
+		delete user.password;
+		return user;
 	}
 
 	findAll() {
@@ -34,7 +38,24 @@ export class UsersService {
 		});
 	}
 
+	async findUserByEmail(email: string): Promise<User> {
+		if (email) {
+			return this.prisma.user.findUnique({
+				where: { email },
+			});
+		}
+		throw new NotFoundException('User Not Found');
+	}
+
 	async filterByRole(role: Role) {
 		return role;
+	}
+	async findUserByAddress(address: any): Promise<User> {
+		if (address) {
+			return this.prisma.user.findUnique({
+				where: { walletAddress: address },
+			});
+		}
+		throw new NotFoundException('User Not Found');
 	}
 }

@@ -10,6 +10,7 @@ Project "SCAFFOLD 1.0" {
 Table users {
   id String [pk]
   name String [not null]
+  password String [not null]
   email String [unique, not null]
   walletAddress Bytes [unique]
   profileImage String

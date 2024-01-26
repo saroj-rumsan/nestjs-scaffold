@@ -10,19 +10,40 @@ import {
 	ParseFloatPipe,
 	Post,
 	Query,
+	Request,
+	UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Find, User } from './types';
 import { AuthService } from './auth.service';
-import { ERRORS } from 'src/utils/exceptions/rs.exception';
-import { ValidationPipe } from 'src/utils/pipes/validation.pipe';
-import { TransformationPipe } from 'src/utils/pipes/transformation.pipe';
+import { ERRORS } from '../utils/exceptions/rs.exception';
+import { ValidationPipe } from '../utils/pipes/validation.pipe';
+import { TransformationPipe } from '../utils/pipes/transformation.pipe';
 import { FindUserById } from './pipes/auth.pipe';
 import { Auth } from './decorators/auth.decorator';
-
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { SiweGuard } from './guards/siwe.guard';
 @Controller('auth')
 export class AuthController {
 	constructor(private authsService: AuthService) {}
+
+	@Post('validate')
+	@UseGuards(LocalAuthGuard)
+	async validateUser(@Request() req) {
+		return req.user;
+	}
+
+	@Post('login')
+	@UseGuards(LocalAuthGuard)
+	async login(@Request() req: any) {
+		return this.authsService.login(req.user);
+	}
+
+	@Post('login/wallet')
+	@UseGuards(SiweGuard)
+	async walletLogin(@Request() req: any) {
+		return this.authsService.walletLogin(req.user);
+	}
 
 	@Post()
 	@Auth(['admin'])
@@ -87,6 +108,10 @@ export class AuthController {
 		console.log({ id, body, address, token });
 	}
 
+	@Get('test')
+	testCont() {
+		return this.authsService.testService();
+	}
 	@Get('error')
 	error() {
 		// throw new Error('This is an Error');

@@ -22,12 +22,21 @@ export class CreateUserDto {
 	email: string;
 
 	@ApiProperty({
+		description: `Example of Password`,
+		example: '*******',
+		type: String,
+	})
+	@IsString()
+	password: string;
+	@ApiProperty({
 		description: `Full name of the user`,
 		example: `Lorem Poseidon`,
 	})
 	@IsString()
 	name: string;
-
+	@ApiProperty({
+		description: `Password for the user`,
+	})
 	@IsOptional()
 	@IsEthereumAddress()
 	@ApiProperty({
@@ -44,4 +53,8 @@ export class CreateUserDto {
 	@IsArray()
 	@IsOptional()
 	roles: [];
+}
+
+export interface emailAddress {
+	email: string;
 }
