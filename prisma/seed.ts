@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { hashPassword } from '../src/utils/string-format';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +31,8 @@ export const users = [
 ];
 
 const createUser = async (user: any) => {
-	const userAttrs = { ...user };
+	const hashedPassword = await hashPassword(user.password);
+	const userAttrs = { ...user, password: hashedPassword };
 	await prisma.user.create({ data: { ...userAttrs } });
 };
 

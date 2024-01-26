@@ -18,6 +18,7 @@ import { Users } from './decorators/users.decorator';
 import { Role } from '@prisma/client';
 import { ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Public } from '../common/decorators/public.decorator';
 @Controller('users')
 @UseGuards(JwtAuthGuard)
 @Users()
@@ -34,11 +35,13 @@ export class UsersController {
 		status: 403,
 		description: 'Forbidden.',
 	})
+	@Public()
 	create(@Body() createUserDto: CreateUserDto) {
 		return this.usersService.create(createUserDto);
 	}
 
 	@Get()
+	@Public()
 	findAll() {
 		return this.usersService.findAll();
 	}

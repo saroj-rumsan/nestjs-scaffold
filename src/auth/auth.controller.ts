@@ -16,9 +16,9 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { Find, User } from './types';
 import { AuthService } from './auth.service';
-import { ERRORS } from 'src/utils/exceptions/rs.exception';
-import { ValidationPipe } from 'src/utils/pipes/validation.pipe';
-import { TransformationPipe } from 'src/utils/pipes/transformation.pipe';
+import { ERRORS } from '../utils/exceptions/rs.exception';
+import { ValidationPipe } from '../utils/pipes/validation.pipe';
+import { TransformationPipe } from '../utils/pipes/transformation.pipe';
 import { FindUserById } from './pipes/auth.pipe';
 import { Auth } from './decorators/auth.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -42,7 +42,7 @@ export class AuthController {
 	@Post('login/wallet')
 	@UseGuards(SiweGuard)
 	async walletLogin(@Request() req: any) {
-		console.log(req.user);
+		return this.authsService.walletLogin(req.user);
 	}
 
 	@Post()
@@ -108,6 +108,10 @@ export class AuthController {
 		console.log({ id, body, address, token });
 	}
 
+	@Get('test')
+	testCont() {
+		return this.authsService.testService();
+	}
 	@Get('error')
 	error() {
 		// throw new Error('This is an Error');

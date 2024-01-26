@@ -4,22 +4,25 @@ import {
 	FastifyAdapter,
 	NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { INestApplication, Logger, VersioningType } from '@nestjs/common';
+import { Logger, VersioningType } from '@nestjs/common';
 import CONSTANTS from 'src/utils/constants';
 import { CustomExceptionFilter } from './utils/exceptions/customException.filter';
 import { ValidationPipe } from './utils/pipes/validation.pipe';
 import { ExcludeNullInterceptor } from './utils/interceptors/excludeNull.interceptor';
 import { TransformInterceptor } from './utils/interceptors/transform.interceptor';
 import { setupSwagger } from './swagger';
+import fastifyHelmet from '@fastify/helmet';
 
 async function bootstrap() {
 	const _logger = new Logger(NestApplication?.name);
-	const app: INestApplication =
-		await NestFactory.create<NestFastifyApplication>(
-			AppModule,
-			new FastifyAdapter({ logger: false }),
-		);
+	const app = await NestFactory.create<NestFastifyApplication>(
+		AppModule,
+		new FastifyAdapter({ logger: false }),
+	);
 	app.enableCors();
+	await app.register(fastifyHelmet, {
+		contentSecurityPolicy: false,
+	});
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalInterceptors(
 		new TransformInterceptor(),

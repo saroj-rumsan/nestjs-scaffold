@@ -11,6 +11,7 @@ export class SiweStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(_req: any, address: string) {
+		console.log({ address });
 		const user = await this.authService.verifyUserByAddress(address);
 		if (!user) {
 			throw new UnauthorizedException();
